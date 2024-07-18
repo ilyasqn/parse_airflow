@@ -25,20 +25,20 @@ def parse_task():
     scripts = soup.find_all('script')
     data_list = []
 
-    for script in scripts:
-        if 'var punkts' in script.text:
+    for script in scripts: #finding script
+        if 'var punkts' in script.text: #finding where data is located by the given variable
             script_text = script.string
-            json_str = script_text.split('var punkts = ')[1].split(';')[0]
+            json_str = script_text.split('var punkts = ')[1].split(';')[0]  #taking all strings and divide each by own lines
             punkts_value = json.loads(json_str)
 
             for punkt in punkts_value:
-                rates = punkt['data']
+                rates = punkt['data'] #taking rates
                 data_list.append(
                     {'name': punkt['name'], currency_1: min(rates[currency_1]) if min(rates[currency_1]) > 0 else None,
                      currency_2: min(rates[currency_2]) if min(rates[currency_2]) > 0 else None,
                      currency_3: min(rates[currency_3]) if min(rates[currency_3]) > 0 else None,
                      currency_1 + '_max': max(rates[currency_1]), currency_2 + '_max': max(rates[currency_2]),
-                     currency_3 + '_max': max(rates[currency_3])})
+                     currency_3 + '_max': max(rates[currency_3])})  #adding min and max rates separetely (because rates in the list)
         else:
             continue
 
